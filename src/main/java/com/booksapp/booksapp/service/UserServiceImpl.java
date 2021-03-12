@@ -106,9 +106,9 @@ public class UserServiceImpl implements UserService {
             throw new InvalidPasswordException("The password doesn't meet the requirements.");
         }
         userRepository.deleteById(id);
-        passwordConfig.passwordEncoder().encode(updatedUser.getPassword());
+        updatedUser.setPassword(passwordConfig.passwordEncoder().encode(updatedUser.getPassword()));
         userRepository.save(updatedUser);
-        return userRepository.findById(updatedUser.getId()).get();
+        return updatedUser;
     }
 
     @Override

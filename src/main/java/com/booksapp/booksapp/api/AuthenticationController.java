@@ -55,11 +55,11 @@ public class AuthenticationController {
     public ResponseEntity<?> logout (@RequestHeader("Authorization") String jwt) {
         String userEmail = jwtProvider.getSubjectFromJWT(jwt);
         jwtRedisService.invalidateJWT(jwt, userEmail);
-        System.out.println("Yu were logged out.");
+        System.out.println("You were logged out.");
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("forgot password")
+    @PostMapping("forgotPassword")
     public ResponseEntity forgotPassword(@RequestBody ForgotPassword forgotPassword) {
         userService.getUserByEmail(forgotPassword.getEmail());
         String newPassword = userService.generateCommonLangPassword();

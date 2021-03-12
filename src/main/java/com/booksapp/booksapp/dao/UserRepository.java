@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE books-app.users " +
+    @Query(value = "UPDATE books_app.users " +
             "SET password = :userPassword " +
             "WHERE email = :userEmail", nativeQuery = true)
     public void resetPassword(String userEmail, String userPassword);
