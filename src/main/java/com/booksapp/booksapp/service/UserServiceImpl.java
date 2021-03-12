@@ -51,14 +51,18 @@ public class UserServiceImpl implements UserService {
         if (!checkPassword(newUser.getPassword())) {
             throw new InvalidPasswordException("The password doesn't meet the requirements.");
         }
+        for (UserEntity userEntity : userRepository.findAll()) {
+            if (userEntity.getEmail(). equals(newUser.getEmail())) {
+                throw new UserAlreadyExistException("This email is already used.");
+            }
+        }
+        for (UserEntity users : userRepository.findAll()) {
+            System.out.println(users.getEmail());
+        }
 
-
-        System.out.println("=======>>>>>>>> I am here");
         newUser.setPassword(passwordConfig.passwordEncoder().encode(newUser.getPassword()));
         userRepository.save(newUser);
-
         return newUser;
-
     }
 
     @Override

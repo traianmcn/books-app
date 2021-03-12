@@ -24,5 +24,13 @@ public class AppUserDetailService implements UserDetailsService {
         }
         return CurrentUser.create(user.get());
     }
+
+    public UserDetails loadUserById(Long userId) {
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+        if (userEntity.isEmpty()) {
+            throw new UsernameNotFoundException("User not found for id "+ userId);
+        }
+        return CurrentUser.create(userEntity.get());
+    }
 }
 

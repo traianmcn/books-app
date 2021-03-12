@@ -7,13 +7,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -25,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private PasswordConfig passwordConfig;
     private JWTProvider jwtProvider;
 
-    private final String[] PATHS = {"/api/v1/login",
+    private final String[] PATHS = {
+            "/api/v1/login",
             "/api/v1/users",
             "/api/v1/customers/register"};
 
@@ -36,9 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtProvider = jwtProvider;
     }
 
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -54,10 +62,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,PATHS)
+                .antMatchers(HttpMethod.POST, PATHS)
                 .permitAll()
-                .antMatchers("api/v1/admin").hasRole(Role.SELLER.name())
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

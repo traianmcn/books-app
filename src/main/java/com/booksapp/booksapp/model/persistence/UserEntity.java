@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "users", schema = "books-app")
+@Table(name = "users", schema = "books_app")
 public class UserEntity {
 
     @Id
