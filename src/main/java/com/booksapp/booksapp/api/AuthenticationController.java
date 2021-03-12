@@ -1,10 +1,13 @@
 package com.booksapp.booksapp.api;
 
+import com.booksapp.booksapp.model.ForgotPassword;
+import com.booksapp.booksapp.model.ResetPasswordDTO;
 import com.booksapp.booksapp.security.JWTModel;
 import com.booksapp.booksapp.security.JWTProvider;
 import com.booksapp.booksapp.security.JWTRedisService;
 import com.booksapp.booksapp.security.LoginRequest;
 import com.booksapp.booksapp.service.UserServiceImpl;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +45,38 @@ public class AuthenticationController {
                         loginRequest.getEmail(),
                         loginRequest.getPassword())
         );
-        System.out.println(loginRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtProvider.generateJWT(authentication);
         return new ResponseEntity<>(new JWTModel(token), HttpStatus.OK);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<?> logout (@RequestHeader("Authorization") String jwt) {
+        String userEmail = jwtProvider.getSubjectFromJWT(jwt);
+        jwtRedisService.invalidateJWT(jwt, userEmail);
+        System.out.println("Yu were logged out.");
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("forgot password")
+    public ResponseEntity forgotPassword(@RequestBody ForgotPassword forgotPassword) {
+        userService.getUserByEmail(forgotPassword.getEmail());
+        String newPassword = userService.generateCommonLangPassword();
+        userService.resetPassword(forgotPassword.getEmail(), newPassword, newPassword);
+        //TODO: send email to user with the new password
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("resetPassword")
+    public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO,
+                                        @RequestHeader("Authorization") String jwt) {
+        String userEmail = jwtProvider.getSubjectFromJWT(jwt);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userEmail, resetPasswordDTO.getCurrentPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        userService.resetPassword(userEmail, resetPasswordDTO.getNewPassword(), resetPasswordDTO.getConfirmedNewPassword());
+        return ResponseEntity.ok().build();
     }
 }
