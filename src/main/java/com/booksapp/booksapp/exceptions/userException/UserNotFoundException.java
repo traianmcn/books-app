@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.exceptions;
+package com.booksapp.booksapp.exceptions.userException;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException (String msg) {

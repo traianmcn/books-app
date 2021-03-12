@@ -1,6 +1,6 @@
 package com.booksapp.booksapp.security;
 
-import com.booksapp.booksapp.model.Role;
+import com.booksapp.booksapp.model.persistence.Role;
 
 public class LoginRequest {
 

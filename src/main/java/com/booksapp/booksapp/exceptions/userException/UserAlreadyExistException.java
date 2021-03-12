@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.exceptions;
+package com.booksapp.booksapp.exceptions.userException;
 
 public class UserAlreadyExistException extends RuntimeException{
     public UserAlreadyExistException(String msg) {

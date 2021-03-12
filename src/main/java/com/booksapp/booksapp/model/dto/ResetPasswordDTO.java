@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.model;
+package com.booksapp.booksapp.model.dto;
 
 public class ResetPasswordDTO {
     private String currentPassword;

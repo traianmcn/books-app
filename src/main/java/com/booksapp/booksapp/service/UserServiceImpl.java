@@ -2,15 +2,14 @@ package com.booksapp.booksapp.service;
 
 import com.booksapp.booksapp.dao.UserRepository;
 import com.booksapp.booksapp.exceptions.InvalidPasswordException;
-import com.booksapp.booksapp.exceptions.UserAlreadyExistException;
-import com.booksapp.booksapp.exceptions.UserNotFoundException;
+import com.booksapp.booksapp.exceptions.userException.UserAlreadyExistException;
+import com.booksapp.booksapp.exceptions.userException.UserNotFoundException;
 import com.booksapp.booksapp.model.persistence.UserEntity;
 import com.booksapp.booksapp.security.PasswordConfig;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

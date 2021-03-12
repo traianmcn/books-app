@@ -1,6 +1,6 @@
 package com.booksapp.booksapp.security;
 
-import com.booksapp.booksapp.model.Role;
+import com.booksapp.booksapp.model.persistence.Role;
 import com.booksapp.booksapp.model.persistence.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

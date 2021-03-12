@@ -1,5 +1,7 @@
-package com.booksapp.booksapp.exceptions;
+package com.booksapp.booksapp.exceptions.userException;
 
+import com.booksapp.booksapp.exceptions.ApiError;
+import com.booksapp.booksapp.exceptions.InvalidPasswordException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

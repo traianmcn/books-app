@@ -1,8 +1,6 @@
 package com.booksapp.booksapp.model.persistence;
 
-import com.booksapp.booksapp.model.Role;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

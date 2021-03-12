@@ -1,17 +1,15 @@
 package com.booksapp.booksapp.api;
 
-import com.booksapp.booksapp.model.ForgotPassword;
-import com.booksapp.booksapp.model.ResetPasswordDTO;
+import com.booksapp.booksapp.model.dto.ForgotPassword;
+import com.booksapp.booksapp.model.dto.ResetPasswordDTO;
 import com.booksapp.booksapp.security.JWTModel;
 import com.booksapp.booksapp.security.JWTProvider;
 import com.booksapp.booksapp.security.JWTRedisService;
 import com.booksapp.booksapp.security.LoginRequest;
 import com.booksapp.booksapp.service.UserServiceImpl;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
