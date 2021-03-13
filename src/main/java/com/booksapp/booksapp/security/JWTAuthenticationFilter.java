@@ -31,8 +31,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String jwt = this.jwtProvider.getJWTFromRequest(httpServletRequest);
-            System.out.println(jwt);
-            System.out.println("=======>>>>>>>>>>You are here!");
+//            System.out.println(jwt);
+//            System.out.println("=======>>>>>>>>>>You are here!");
 
             if (StringUtils.hasText(jwt) && this.jwtProvider.validateToken(jwt) && !jwtRedisService.isJWTBlackListed(jwt)) {
                 String email = this.jwtProvider.getSubjectFromJWT(jwt);
