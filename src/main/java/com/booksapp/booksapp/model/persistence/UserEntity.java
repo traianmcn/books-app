@@ -22,6 +22,14 @@ public class UserEntity {
     private String password;
     private Role role;
 
+    @OneToOne(
+            mappedBy = "userEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private CustomerEntity customerEntity;
+
     public UserEntity() {}
 
     public UserEntity(String email, String password) {
@@ -73,6 +81,14 @@ public class UserEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
     @Override

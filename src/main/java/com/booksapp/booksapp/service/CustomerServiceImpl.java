@@ -13,10 +13,12 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
+    private UserServiceImpl userService;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserServiceImpl userService) {
         this.customerRepository = customerRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -40,14 +42,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(long id) {
         CustomerEntity customerEntity = getCustomerById(id);
-        customerRepository.delete(customerEntity);
+        UserEntity userEntity = customerEntity.getUserEntity();
+        userService.deleteUser(userEntity.getId());
+
     }
 
     @Override
     public CustomerEntity updateCustomer(long id, CustomerEntity updatedCustomer) {
-        getCustomerById(id);
-        customerRepository.delete(getCustomerById(id));
-        return customerRepository.save(updatedCustomer);
+        CustomerEntity customerEntity = getCustomerById(id);
+        UserEntity userEntity = customerEntity.getUserEntity();
+        customerRepository.deleteById(id);
+        updatedCustomer.setUserEntity(userEntity);
+         return customerRepository.save(updatedCustomer);
     }
 
     @Override

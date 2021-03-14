@@ -12,7 +12,8 @@ public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
+//    @Column(updatable = false, nullable = false)
+//    @Column(name = "customer_id")
     private long id;
 
     @CreationTimestamp
@@ -21,11 +22,12 @@ public class CustomerEntity {
     private String name;
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone")
     private String phoneNumber;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
+//    @MapsId()
     @JsonIgnore
     private UserEntity userEntity;
 
@@ -38,6 +40,7 @@ public class CustomerEntity {
         this.phoneNumber = phoneNumber;
         this.userEntity = userEntity;
     }
+
 
     public long getId() {
         return id;
