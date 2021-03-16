@@ -1,6 +1,6 @@
-package com.booksapp.booksapp.exceptions;
+package com.booksapp.booksapp.exceptions.bookCategoryExceptions;
 
-import com.booksapp.booksapp.exceptions.bookCategoryExceptions.BookCategoryNotFoundException;
+import com.booksapp.booksapp.exceptions.ApiError;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class BookExceptionHandler {
+public class BookCategoryExceptionHandler {
 
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<ApiError> handleBookNotFoundException(BookNotFoundException e, HttpServletRequest request) {
+    @ExceptionHandler(BookCategoryNotFoundException.class)
+    public ResponseEntity<ApiError> handleBookCategoryNotFound(BookCategoryNotFoundException e, HttpServletRequest request) {
         StringBuilder requestUrl = new StringBuilder(request.getRequestURL().toString());
         String queryString = request.getQueryString(); // ==> result null
         String path = requestUrl.append('?').append(queryString).toString();

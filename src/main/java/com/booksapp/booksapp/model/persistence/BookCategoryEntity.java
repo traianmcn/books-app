@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "categories", schema = "books_app")
@@ -24,6 +25,14 @@ public class BookCategoryEntity {
     @JoinColumn(name = "seller_id")
     @JsonIgnore
     private SellerEntity sellerEntity;
+
+    @OneToMany(
+            mappedBy = "bookCategoryEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<BookEntity> bookEntities;
 
     public BookCategoryEntity(Category name, String description) {
         this.name = name;
@@ -71,6 +80,14 @@ public class BookCategoryEntity {
 
     public void setSellerEntity(SellerEntity sellerEntity) {
         this.sellerEntity = sellerEntity;
+    }
+
+    public List<BookEntity> getBookEntities() {
+        return bookEntities;
+    }
+
+    public void setBookEntities(List<BookEntity> bookEntities) {
+        this.bookEntities = bookEntities;
     }
 
     @Override

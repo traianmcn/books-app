@@ -1,7 +1,7 @@
 package com.booksapp.booksapp.service;
 
 import com.booksapp.booksapp.dao.BookCategoryRepository;
-import com.booksapp.booksapp.exceptions.BookCategoryNotFoundException;
+import com.booksapp.booksapp.exceptions.bookCategoryExceptions.BookCategoryNotFoundException;
 import com.booksapp.booksapp.model.persistence.BookCategoryEntity;
 import com.booksapp.booksapp.model.persistence.SellerEntity;
 import org.springframework.beans.factory.annotation.Autowired;

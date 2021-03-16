@@ -2,11 +2,9 @@ package com.booksapp.booksapp.api;
 
 import com.booksapp.booksapp.dao.BookCategoryRepository;
 import com.booksapp.booksapp.model.dto.SellerDTO;
-import com.booksapp.booksapp.model.persistence.BookCategoryEntity;
-import com.booksapp.booksapp.model.persistence.Role;
-import com.booksapp.booksapp.model.persistence.SellerEntity;
-import com.booksapp.booksapp.model.persistence.UserEntity;
+import com.booksapp.booksapp.model.persistence.*;
 import com.booksapp.booksapp.service.BookCategoryServiceImpl;
+import com.booksapp.booksapp.service.BookServiceImpl;
 import com.booksapp.booksapp.service.SellerServiceImpl;
 import com.booksapp.booksapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,13 +22,15 @@ public class SellerController {
     private UserServiceImpl userService;
     private BookCategoryServiceImpl bookCategoryService;
     private BookCategoryRepository bookCategoryRepository;
+    private BookServiceImpl bookService;
 
     @Autowired
-    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService, BookCategoryServiceImpl bookCategoryService, BookCategoryRepository bookCategoryRepository) {
+    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService, BookCategoryServiceImpl bookCategoryService, BookCategoryRepository bookCategoryRepository, BookServiceImpl bookService) {
         this.sellerService = sellerService;
         this.userService = userService;
         this.bookCategoryService = bookCategoryService;
         this.bookCategoryRepository = bookCategoryRepository;
+        this.bookService = bookService;
     }
 
     @PostMapping("/register")
@@ -108,5 +107,26 @@ public class SellerController {
         bookCategoryService.updateCategory(sellerId, id, updatedBookCategory);
 
         return new ResponseEntity<>(updatedBookCategory, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{sellerId}/categories/{id}/books")
+    public ResponseEntity<BookEntity> addBook(@PathVariable long sellerId, @PathVariable long id, @RequestBody BookEntity newBook) {
+        bookService.createBook(sellerId, id, newBook);
+
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{sellerId}/categories/{id}/books")
+    public ResponseEntity<List<BookEntity>> getAllBooksByCategory(@PathVariable long sellerId, @PathVariable long id) {
+        List<BookEntity> books = bookService.getAllBooksByCategory(sellerId, id);
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping("/{sellerId}/categories/{id}/books/{bookId}")
+    public ResponseEntity<BookEntity> getBookById(@PathVariable long sellerId, @PathVariable long id, @PathVariable long bookId) {
+        BookEntity book = bookService.getBookById(sellerId, id, bookId);
+
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 }
