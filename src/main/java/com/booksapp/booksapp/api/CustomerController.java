@@ -69,7 +69,7 @@ public class CustomerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("{id}")
+    @PutMapping("{id}")
     public ResponseEntity<CustomerEntity> updateCustomer (@PathVariable long id, @RequestBody CustomerEntity newCustomerEntity) {
         customerService.updateCustomer(id, newCustomerEntity);
 

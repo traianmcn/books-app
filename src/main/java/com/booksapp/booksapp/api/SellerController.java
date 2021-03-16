@@ -1,10 +1,12 @@
 package com.booksapp.booksapp.api;
 
+import com.booksapp.booksapp.dao.BookCategoryRepository;
 import com.booksapp.booksapp.model.dto.SellerDTO;
+import com.booksapp.booksapp.model.persistence.BookCategoryEntity;
 import com.booksapp.booksapp.model.persistence.Role;
 import com.booksapp.booksapp.model.persistence.SellerEntity;
 import com.booksapp.booksapp.model.persistence.UserEntity;
-import com.booksapp.booksapp.service.SellerService;
+import com.booksapp.booksapp.service.BookCategoryServiceImpl;
 import com.booksapp.booksapp.service.SellerServiceImpl;
 import com.booksapp.booksapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,11 +23,15 @@ public class SellerController {
 
     private SellerServiceImpl sellerService;
     private UserServiceImpl userService;
+    private BookCategoryServiceImpl bookCategoryService;
+    private BookCategoryRepository bookCategoryRepository;
 
     @Autowired
-    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService) {
+    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService, BookCategoryServiceImpl bookCategoryService, BookCategoryRepository bookCategoryRepository) {
         this.sellerService = sellerService;
         this.userService = userService;
+        this.bookCategoryService = bookCategoryService;
+        this.bookCategoryRepository = bookCategoryRepository;
     }
 
     @PostMapping("/register")
@@ -54,7 +61,7 @@ public class SellerController {
         return new ResponseEntity<>(sellerEntity, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<SellerEntity> updateSeller(@PathVariable long id, @RequestBody SellerEntity sellerEntity) {
         sellerService.updateSeller(id, sellerEntity);
 
@@ -66,5 +73,40 @@ public class SellerController {
         sellerService.deleteSeller(id);
 
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/{sellerId}/categories")
+    public ResponseEntity<BookCategoryEntity> createBookCategory(@PathVariable long sellerId, @RequestBody BookCategoryEntity bookCategoryEntity) {
+        bookCategoryService.createCategory(sellerId, bookCategoryEntity);
+
+        return new ResponseEntity<>(bookCategoryEntity, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{sellerId}/categories/{id}")
+    public ResponseEntity<BookCategoryEntity> getCategoryById(@PathVariable long sellerId, @PathVariable long id) {
+        bookCategoryService.getCategoryById(sellerId, id);
+        BookCategoryEntity bookCategoryEntity = bookCategoryRepository.findById(id).get();
+        return new ResponseEntity<>(bookCategoryEntity, HttpStatus.OK);
+    }
+
+    @GetMapping("/{sellerId}/categories")
+    public ResponseEntity<List> getAllCategories(@PathVariable long sellerId) {
+        List<BookCategoryEntity> bookCategoryEntities = bookCategoryService.getAllCategories(sellerId);
+
+        return new ResponseEntity<>(bookCategoryEntities, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{sellerId}/categories/{id}")
+    public ResponseEntity deleteCategoryById(@PathVariable long sellerId, @PathVariable long id) {
+        bookCategoryService.deleteCategory(sellerId, id);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PutMapping("/{sellerId}/categories/{id}")
+    public ResponseEntity<BookCategoryEntity> updateCategory(@PathVariable long sellerId, @PathVariable long id, @RequestBody BookCategoryEntity updatedBookCategory) {
+        bookCategoryService.updateCategory(sellerId, id, updatedBookCategory);
+
+        return new ResponseEntity<>(updatedBookCategory, HttpStatus.ACCEPTED);
     }
 }

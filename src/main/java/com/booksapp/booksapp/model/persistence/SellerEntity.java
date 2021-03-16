@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "sellers", schema = "books_app")
@@ -27,6 +28,14 @@ public class SellerEntity {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserEntity userEntity;
+
+    @OneToMany(
+            mappedBy = "sellerEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<BookCategoryEntity> bookCategories;
 
     public SellerEntity(String name, String address, String phoneNumber, UserEntity userEntity) {
         this.name = name;
@@ -86,15 +95,24 @@ public class SellerEntity {
         this.userEntity = userEntity;
     }
 
-    @Override
-    public String toString() {
-        return "SellerEntity{" +
-                "id=" + id +
-                ", created_at=" + created_at +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", userEntity=" + userEntity +
-                '}';
+    public List<BookCategoryEntity> getBookCategories() {
+        return bookCategories;
     }
+
+    public void setBookCategories(List<BookCategoryEntity> bookCategories) {
+        this.bookCategories = bookCategories;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "SellerEntity{" +
+//                "id=" + id +
+//                ", created_at=" + created_at +
+//                ", name='" + name + '\'' +
+//                ", address='" + address + '\'' +
+//                ", phoneNumber='" + phoneNumber + '\'' +
+//                ", userEntity=" + userEntity +
+//                ", bookCategories=" + bookCategories +
+//                '}';
+//    }
 }
