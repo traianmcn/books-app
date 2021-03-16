@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] PATHS = {
             "/api/v1/login",
             "/api/v1/users",
-            "/api/v1/customers/register"};
+            "/api/v1/customers/register",
+            "/api/v1/sellers/register"};
 
     @Autowired
     public SecurityConfig(AppUserDetailService appUserDetailService, PasswordConfig passwordConfig, JWTProvider jwtProvider) {

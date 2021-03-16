@@ -30,6 +30,14 @@ public class UserEntity {
     )
     private CustomerEntity customerEntity;
 
+    @OneToOne(
+            mappedBy = "userEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private SellerEntity sellerEntity;
+
     public UserEntity() {}
 
     public UserEntity(String email, String password) {
@@ -89,6 +97,14 @@ public class UserEntity {
 
     public void setCustomerEntity(CustomerEntity customerEntity) {
         this.customerEntity = customerEntity;
+    }
+
+    public SellerEntity getSellerEntity() {
+        return sellerEntity;
+    }
+
+    public void setSellerEntity(SellerEntity sellerEntity) {
+        this.sellerEntity = sellerEntity;
     }
 
     @Override
