@@ -90,9 +90,7 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("The user with id " + id + " does not exist.");
         }
-        else {
             userRepository.deleteById(id);
-        }
 
     }
 
