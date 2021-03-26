@@ -8,6 +8,7 @@ import com.booksapp.booksapp.security.JWTProvider;
 import com.booksapp.booksapp.security.PasswordConfig;
 import com.booksapp.booksapp.service.CustomerServiceImpl;
 import com.booksapp.booksapp.service.UserServiceImpl;
+import com.booksapp.booksapp.service.email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,15 @@ public class CustomerController {
     private JWTProvider jwtProvider;
     private UserServiceImpl userService;
     private PasswordConfig passwordConfig;
+    private EmailSender emailSender;
 
     @Autowired
-    public CustomerController(CustomerServiceImpl customerService, JWTProvider jwtProvider, UserServiceImpl userService, PasswordConfig passwordConfig) {
+    public CustomerController(CustomerServiceImpl customerService, JWTProvider jwtProvider, UserServiceImpl userService, PasswordConfig passwordConfig, EmailSender emailSender) {
         this.customerService = customerService;
         this.jwtProvider = jwtProvider;
         this.userService = userService;
         this.passwordConfig = passwordConfig;
+        this.emailSender = emailSender;
     }
 
     @PostMapping("/register")
@@ -43,6 +46,8 @@ public class CustomerController {
         customerEntity.setPhoneNumber(customerDTO.getPhoneNumber());
         customerEntity.setUserEntity(userEntity);
         customerService.createCustomer(customerEntity);
+
+        emailSender.sendEmail(customerDTO.getEmail(), "Your account has benn created.");
 
         return new ResponseEntity<>(customerEntity, HttpStatus.CREATED);
 
@@ -64,7 +69,10 @@ public class CustomerController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteCustomer(@PathVariable long id) {
+        CustomerEntity customer = customerService.getCustomerById(id);
+        String email = customer.getUserEntity().getEmail();
         customerService.deleteCustomer(id);
+        emailSender.sendEmail(email, "Yout account has been deleted. Have a nice day!");
 
         return ResponseEntity.ok().build();
     }
@@ -72,6 +80,8 @@ public class CustomerController {
     @PutMapping("{id}")
     public ResponseEntity<CustomerEntity> updateCustomer (@PathVariable long id, @RequestBody CustomerEntity newCustomerEntity) {
         customerService.updateCustomer(id, newCustomerEntity);
+        String email = newCustomerEntity.getUserEntity().getEmail();
+        emailSender.sendEmail("email", "Your account has been updated. If it wasn't you, please reset your password.");
 
         return new ResponseEntity(newCustomerEntity, HttpStatus.ACCEPTED);
     }

@@ -2,10 +2,12 @@ package com.booksapp.booksapp.service;
 
 import com.booksapp.booksapp.dao.UserRepository;
 import com.booksapp.booksapp.exceptions.InvalidPasswordException;
+import com.booksapp.booksapp.exceptions.userException.InvalidEmailFormatException;
 import com.booksapp.booksapp.exceptions.userException.UserAlreadyExistException;
 import com.booksapp.booksapp.exceptions.userException.UserNotFoundException;
 import com.booksapp.booksapp.model.persistence.UserEntity;
 import com.booksapp.booksapp.security.PasswordConfig;
+import com.booksapp.booksapp.service.email.EmailValidator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +27,13 @@ public class UserServiceImpl implements UserService {
     private PasswordConfig passwordConfig;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordConfig passwordConfig) {
+    private EmailValidator emailValidator;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordConfig passwordConfig, EmailValidator emailValidator) {
         this.userRepository = userRepository;
         this.passwordConfig = passwordConfig;
+        this.emailValidator = emailValidator;
     }
 
     public boolean checkPassword(String password) {
@@ -49,6 +55,10 @@ public class UserServiceImpl implements UserService {
     public UserEntity createUser(UserEntity newUser) {
         if (!checkPassword(newUser.getPassword())) {
             throw new InvalidPasswordException("The password doesn't meet the requirements.");
+        }
+
+        if (!emailValidator.isValid(newUser.getEmail())) {
+            throw new InvalidEmailFormatException("Incorrect email format!");
         }
         for (UserEntity userEntity : userRepository.findAll()) {
             if (userEntity.getEmail(). equals(newUser.getEmail())) {

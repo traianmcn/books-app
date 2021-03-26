@@ -40,9 +40,9 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     @Override
     public BookCategoryEntity getCategoryById(long sellerId, long categoryId) {
 
-        sellerService.getSellerById(sellerId);
+        sellerService.getSellerById(sellerId); // throw exception if seller does not exist
         Optional<BookCategoryEntity> bookCategoryEntity = bookCategoryRepository.findById(categoryId);
-        if (bookCategoryEntity.isEmpty()) {
+        if (bookCategoryEntity.isEmpty() || bookCategoryEntity.get().getSellerEntity() == null) {
             throw new BookCategoryNotFoundException("The book category with id " + categoryId + " does not exist");
         }
 

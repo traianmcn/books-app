@@ -33,4 +33,14 @@ public class UserExceptionHandler {
     public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException e, HttpServletRequest request) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidEmailFormatException.class)
+    public ResponseEntity<ApiError> handleInvalidEmailFormatException(InvalidEmailFormatException e, HttpServletRequest request) {
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+        String querryString = request.getQueryString();
+        String path = requestURL.append('?').append(querryString).toString();
+        ApiError apiError = new ApiError(500, e.getMessage(), path);
+
+        return new ResponseEntity<ApiError>(apiError, HttpStatus.BAD_REQUEST);
+    }
 }

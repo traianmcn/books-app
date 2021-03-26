@@ -7,6 +7,7 @@ import com.booksapp.booksapp.service.BookCategoryServiceImpl;
 import com.booksapp.booksapp.service.BookServiceImpl;
 import com.booksapp.booksapp.service.SellerServiceImpl;
 import com.booksapp.booksapp.service.UserServiceImpl;
+import com.booksapp.booksapp.service.email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +24,16 @@ public class SellerController {
     private BookCategoryServiceImpl bookCategoryService;
     private BookCategoryRepository bookCategoryRepository;
     private BookServiceImpl bookService;
+    private EmailSender emailSender;
 
     @Autowired
-    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService, BookCategoryServiceImpl bookCategoryService, BookCategoryRepository bookCategoryRepository, BookServiceImpl bookService) {
+    public SellerController(SellerServiceImpl sellerService, UserServiceImpl userService, BookCategoryServiceImpl bookCategoryService, BookCategoryRepository bookCategoryRepository, BookServiceImpl bookService, EmailSender emailSender) {
         this.sellerService = sellerService;
         this.userService = userService;
         this.bookCategoryService = bookCategoryService;
         this.bookCategoryRepository = bookCategoryRepository;
         this.bookService = bookService;
+        this.emailSender = emailSender;
     }
 
     @PostMapping("/register")
@@ -42,6 +45,8 @@ public class SellerController {
         SellerEntity sellerEntity = new SellerEntity(sellerDTO.getName(), sellerDTO.getAddress(),
                 sellerDTO.getPhone(), userEntity);
         sellerService.createSeller(sellerEntity);
+
+        emailSender.sendEmail(sellerDTO.getEmail(), "Welcome to your account!");
 
         return new ResponseEntity<>(sellerEntity, HttpStatus.CREATED);
     }
@@ -63,13 +68,18 @@ public class SellerController {
     @PutMapping("/{id}")
     public ResponseEntity<SellerEntity> updateSeller(@PathVariable long id, @RequestBody SellerEntity sellerEntity) {
         sellerService.updateSeller(id, sellerEntity);
+        String email = sellerEntity.getUserEntity().getEmail();
+        emailSender.sendEmail("email", "Your account has been updated. If it wasn't you, please reset your password.");
 
         return new ResponseEntity<>(sellerEntity, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteSeller(@PathVariable long id) {
+        SellerEntity seller = sellerService.getSellerById(id);
+        String email = seller.getUserEntity().getEmail();
         sellerService.deleteSeller(id);
+        emailSender.sendEmail(email, "Your account has benn deleted. Have a nice day!");
 
         return ResponseEntity.accepted().build();
     }

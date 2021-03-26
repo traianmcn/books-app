@@ -26,6 +26,7 @@ public class BookCategoryEntity {
     @JsonIgnore
     private SellerEntity sellerEntity;
 
+    @JsonIgnore
     @OneToMany(
             mappedBy = "bookCategoryEntity",
             cascade = CascadeType.REMOVE,

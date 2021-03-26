@@ -7,6 +7,7 @@ import com.booksapp.booksapp.security.JWTProvider;
 import com.booksapp.booksapp.security.JWTRedisService;
 import com.booksapp.booksapp.security.LoginRequest;
 import com.booksapp.booksapp.service.UserServiceImpl;
+import com.booksapp.booksapp.service.email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,16 @@ public class AuthenticationController {
     private JWTProvider jwtProvider;
     private UserServiceImpl userService;
     private JWTRedisService jwtRedisService;
+    private EmailSender emailSender;
 
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JWTProvider jwtProvider, UserServiceImpl userService,
-                                    JWTRedisService jwtRedisService) {
+                                    JWTRedisService jwtRedisService, EmailSender emailSender) {
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
         this.userService = userService;
         this.jwtRedisService = jwtRedisService;
+        this.emailSender = emailSender;
     }
 
     @PostMapping("login")
@@ -62,7 +65,9 @@ public class AuthenticationController {
         userService.getUserByEmail(forgotPassword.getEmail());
         String newPassword = userService.generateCommonLangPassword();
         userService.resetPassword(forgotPassword.getEmail(), newPassword, newPassword);
-        //TODO: send email to user with the new password
+        emailSender.sendEmail(forgotPassword.getEmail(), "Please log in with this password, and then change id: " +
+                newPassword);
+
         return ResponseEntity.ok().build();
     }
 
@@ -75,6 +80,7 @@ public class AuthenticationController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         userService.resetPassword(userEmail, resetPasswordDTO.getNewPassword(), resetPasswordDTO.getConfirmedNewPassword());
+        emailSender.sendEmail(userEmail, "Your password has been successfully changed.");
         return ResponseEntity.ok().build();
     }
 }
