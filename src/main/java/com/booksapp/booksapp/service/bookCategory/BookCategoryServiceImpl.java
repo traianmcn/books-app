@@ -42,45 +42,25 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     @Override
     public BookCategoryEntity getCategoryById(long sellerId, long categoryId) {
 
-        sellerService.getSellerById(sellerId); // throw exception if seller does not exist
-        Optional<BookCategoryEntity> bookCategoryEntity = bookCategoryRepository.findById(categoryId);
-        if (bookCategoryEntity.isEmpty() || bookCategoryEntity.get().getSellerEntity() == null) {
+        sellerService.getSellerById(sellerId);
+        Optional<BookCategoryEntity> category = this.bookCategoryRepository.findCategoryById(sellerId, categoryId);
+
+        if (category.isEmpty()) {
             throw new BookCategoryNotFoundException("The book category with id " + categoryId + " does not exist");
         }
-
-        if (bookCategoryEntity.get().getSellerEntity().getId() != sellerId) {
-            throw new BookCategoryNotFoundException("The book category with id " + categoryId + " doest not belong to this seller");
-        }
-
-        return bookCategoryEntity.get();
+        return category.get();
     }
 
     @Override
     public void deleteCategory(long  sellerId, long id) {
 
         sellerService.getSellerById(sellerId);
-        Optional<BookCategoryEntity> bookCategoryEntity = bookCategoryRepository.findById(id);
-        if (bookCategoryEntity.isEmpty()) {
-            throw new BookCategoryNotFoundException("The book category with id " + id + " does not exist");
+        BookCategoryEntity category = getCategoryById(sellerId, id);
+        if (category == null) {
+            throw new BookCategoryNotFoundException("The category with id " + id + " doest not exist");
         }
-
-        if (bookCategoryEntity.get().getSellerEntity().getId() != sellerId) {
-            throw new BookCategoryNotFoundException("The book category with id " + id + " doest not belong to this seller");
-        }
-
         bookCategoryRepository.deleteById(id);
 
-        //TODO: Method threw 'java.lang.StackOverflowError' exception. Cannot evaluate com.booksapp.booksapp.model.persistence.SellerEntity.toString()
-        // -> throw when initializing seller:
-//        SellerEntity seller = sellerService.getSellerById(sellerId);
-//
-//        for (BookCategoryEntity bookCategoryEntity : seller.getBookCategories()) {
-//            if (bookCategoryEntity.getId() == id) {
-//                bookCategoryRepository.deleteById(id);
-//            }
-//            else {
-//                throw new BookCategoryNotFoundException("The category with id " + id + " doest not exist for this seller"  );
-//            }
 
     }
 

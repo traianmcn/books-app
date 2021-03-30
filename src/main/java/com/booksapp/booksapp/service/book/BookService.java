@@ -12,6 +12,6 @@ public interface BookService {
     BookEntity createBook(long sellerId, long categoryId, BookEntity newBook);
     List<BookEntity> getAllBooksByCategory(long sellerId, long categoryId);
     BookEntity getBookById(long sellerId, long categoryId, long bookId);
-    void deleteBook(long sellerId, long id);
-    BookEntity updateBook(long sellerId, long id, BookEntity updatedBook);
+    void deleteBook(long sellerId, long categoryId, long bookId);
+    BookEntity updateBook(long sellerId, long categoryId, long bookId, BookEntity updatedBook);
 }

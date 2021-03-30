@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface BookCategoryRepository extends JpaRepository<BookCategoryEntity, Long> {
 
-//    @Query(value = "SELECT BookCategoryEntity bookCateg FROM books_app.categories c WHERE bookCateg.seller_id = :id", nativeQuery = true)
-//    Optional<BookCategoryEntity> findCategoryById(long id);
+    @Query(value = "SELECT * FROM books_app.categories c " +
+            "WHERE c.seller_id = :sellerId AND c.id = :categoryId", nativeQuery = true)
+    Optional<BookCategoryEntity> findCategoryById(long sellerId, long categoryId);
 }

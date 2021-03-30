@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -30,48 +31,64 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookEntity createBook(long sellerId, long categoryId, BookEntity newBook) {
         SellerEntity seller = sellerService.getSellerById(sellerId);
-        for (BookCategoryEntity category : seller.getBookCategories()) {
-            if (category.getId() != categoryId) {
+        BookCategoryEntity category = bookCategoryService.getCategoryById(sellerId, categoryId);
+        if (category == null) {
                 throw new BookCategoryNotFoundException("The category with id " + categoryId + " doest not exist.");
             }
-            else {
-                newBook.setBookCategoryEntity(category);
-                bookRepository.save(newBook);
-            }
-        }
-        return newBook;
-
+            newBook.setBookCategoryEntity(category);
+            bookRepository.save(newBook);
+            return newBook;
     }
 
     @Override
     public  List<BookEntity> getAllBooksByCategory(long sellerId, long categoryId) {
+        sellerService.getSellerById(sellerId);
         BookCategoryEntity category = bookCategoryService.getCategoryById(sellerId, categoryId);
-
         return category.getBookEntities();
     }
 
     @Override
     public BookEntity getBookById(long sellerId, long categoryId, long bookId) {
-        List<BookEntity> books = getAllBooksByCategory(sellerId, categoryId);
-        BookEntity bookEntity = new BookEntity();
-        for (BookEntity book : books) {
-            if (book.getId() == bookId) {
-                bookEntity = book;
-            }
-            else {
-                throw new BookNotFoundException("The book with id " + bookId + " does not exist");
-            }
+//        List<BookEntity> books = getAllBooksByCategory(sellerId, categoryId);
+//        BookEntity bookEntity = new BookEntity();
+//        for (BookEntity book : books) {
+//            if (book.getId() == bookId) {
+//                bookEntity = book;
+//            }
+//            else {
+//                throw new BookNotFoundException("The book with id " + bookId + " does not exist");
+//            }
+//        }
+//        return bookEntity;
+        sellerService.getSellerById(sellerId);
+        Optional<BookEntity> book = this.bookRepository.findBookById(sellerId, categoryId, bookId);
+        if (book.isEmpty()) {
+            throw new BookNotFoundException("The book with id " + bookId + " doest not exist");
         }
-        return bookEntity;
+        return book.get();
     }
 
     @Override
-    public void deleteBook(long seller, long id) {
+    public void deleteBook(long sellerId, long categoryId, long bookId) {
+        Optional<BookEntity> book = this.bookRepository.findBookById(sellerId, categoryId, bookId);
+        if (book.isEmpty()) {
+            throw new BookNotFoundException("The book with id " + bookId + " doest not exist");
+        }
 
+        this.bookRepository.deleteById(bookId);
     }
 
     @Override
-    public BookEntity updateBook(long sellerId, long id, BookEntity updatedBook) {
-        return null;
+    public BookEntity updateBook(long sellerId, long categoryId, long bookId, BookEntity updatedBook) {
+        sellerService.getSellerById(sellerId);
+        Optional<BookEntity> book = this.bookRepository.findBookById(sellerId, categoryId, bookId);
+
+        if (book.isEmpty()) {
+            throw new BookNotFoundException("The book with id " + bookId + " doest not exist");
+        }
+
+        updatedBook.setBookCategoryEntity(book.get().getBookCategoryEntity());
+        this.bookRepository.delete(book.get());
+        return this.bookRepository.save(updatedBook);
     }
 }
