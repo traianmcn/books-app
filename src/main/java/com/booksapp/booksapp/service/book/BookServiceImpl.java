@@ -30,7 +30,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookEntity createBook(long sellerId, long categoryId, BookEntity newBook) {
-        SellerEntity seller = sellerService.getSellerById(sellerId);
         BookCategoryEntity category = bookCategoryService.getCategoryById(sellerId, categoryId);
         if (category == null) {
                 throw new BookCategoryNotFoundException("The category with id " + categoryId + " doest not exist.");
@@ -60,7 +59,7 @@ public class BookServiceImpl implements BookService {
 //            }
 //        }
 //        return bookEntity;
-        sellerService.getSellerById(sellerId);
+        bookCategoryService.getCategoryById(sellerId, categoryId);
         Optional<BookEntity> book = this.bookRepository.findBookById(sellerId, categoryId, bookId);
         if (book.isEmpty()) {
             throw new BookNotFoundException("The book with id " + bookId + " doest not exist");
@@ -80,7 +79,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookEntity updateBook(long sellerId, long categoryId, long bookId, BookEntity updatedBook) {
-        sellerService.getSellerById(sellerId);
+        bookCategoryService.getCategoryById(sellerId, categoryId);
         Optional<BookEntity> book = this.bookRepository.findBookById(sellerId, categoryId, bookId);
 
         if (book.isEmpty()) {

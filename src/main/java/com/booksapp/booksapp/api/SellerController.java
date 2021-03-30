@@ -133,10 +133,24 @@ public class SellerController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/{sellerId}/categories/{id}/books/{bookId}")
-    public ResponseEntity<BookEntity> getBookById(@PathVariable long sellerId, @PathVariable long id, @PathVariable long bookId) {
-        BookEntity book = bookService.getBookById(sellerId, id, bookId);
+    @GetMapping("/{sellerId}/categories/{categoryId}/books/{bookId}")
+    public ResponseEntity<BookEntity> getBookById(@PathVariable long sellerId, @PathVariable long categoryId, @PathVariable long bookId) {
+        BookEntity book = bookService.getBookById(sellerId, categoryId, bookId);
 
         return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
+    @PutMapping("{sellerId}/categories/{categoryId}/books/{bookId}")
+    public ResponseEntity<BookEntity> updateBook(@PathVariable long sellerId, @PathVariable long categoryId, @PathVariable long bookId, @RequestBody BookEntity updateBook) {
+        BookEntity book = bookService.updateBook(sellerId, categoryId, bookId, updateBook);
+
+        return new ResponseEntity<>(book, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("{sellerId}/categories/{categoryId}/books/{bookId}")
+    public ResponseEntity deleteBook(@PathVariable long sellerId, @PathVariable long categoryId, @PathVariable long bookId) {
+        bookService.deleteBook(sellerId, categoryId, bookId);
+
+        return ResponseEntity.accepted().build();
     }
 }
