@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.book;
 
 import com.booksapp.booksapp.dao.BookRepository;
 import com.booksapp.booksapp.exceptions.BookNotFoundException;
@@ -6,12 +6,11 @@ import com.booksapp.booksapp.exceptions.bookCategoryExceptions.BookCategoryNotFo
 import com.booksapp.booksapp.model.persistence.BookCategoryEntity;
 import com.booksapp.booksapp.model.persistence.BookEntity;
 import com.booksapp.booksapp.model.persistence.SellerEntity;
+import com.booksapp.booksapp.service.seller.SellerServiceImpl;
+import com.booksapp.booksapp.service.bookCategory.BookCategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

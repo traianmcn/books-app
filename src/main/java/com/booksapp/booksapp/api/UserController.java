@@ -2,7 +2,7 @@ package com.booksapp.booksapp.api;
 
 
 import com.booksapp.booksapp.model.persistence.UserEntity;
-import com.booksapp.booksapp.service.UserServiceImpl;
+import com.booksapp.booksapp.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

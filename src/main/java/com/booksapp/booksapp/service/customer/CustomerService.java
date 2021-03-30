@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.customer;
 
 import com.booksapp.booksapp.model.persistence.CustomerEntity;
 import com.booksapp.booksapp.model.persistence.UserEntity;

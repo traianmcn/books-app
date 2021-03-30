@@ -1,9 +1,10 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.customer;
 
 import com.booksapp.booksapp.dao.CustomerRepository;
 import com.booksapp.booksapp.exceptions.customerException.CustomerNotFoundException;
 import com.booksapp.booksapp.model.persistence.CustomerEntity;
 import com.booksapp.booksapp.model.persistence.UserEntity;
+import com.booksapp.booksapp.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

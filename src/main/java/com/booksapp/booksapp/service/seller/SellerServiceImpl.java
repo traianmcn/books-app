@@ -1,9 +1,10 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.seller;
 
 import com.booksapp.booksapp.dao.SellerRepository;
 import com.booksapp.booksapp.exceptions.sellerException.SellerNotFoundException;
 import com.booksapp.booksapp.model.persistence.SellerEntity;
 import com.booksapp.booksapp.model.persistence.UserEntity;
+import com.booksapp.booksapp.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

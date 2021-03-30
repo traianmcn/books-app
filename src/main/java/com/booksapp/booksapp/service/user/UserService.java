@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.user;
 
 import com.booksapp.booksapp.dao.UserRepository;
 import com.booksapp.booksapp.model.persistence.UserEntity;

@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.user;
 
 import com.booksapp.booksapp.dao.UserRepository;
 import com.booksapp.booksapp.exceptions.InvalidPasswordException;
@@ -8,6 +8,7 @@ import com.booksapp.booksapp.exceptions.userException.UserNotFoundException;
 import com.booksapp.booksapp.model.persistence.UserEntity;
 import com.booksapp.booksapp.security.PasswordConfig;
 import com.booksapp.booksapp.service.email.EmailValidator;
+import com.booksapp.booksapp.service.user.UserService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

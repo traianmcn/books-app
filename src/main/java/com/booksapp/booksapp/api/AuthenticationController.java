@@ -6,7 +6,7 @@ import com.booksapp.booksapp.security.JWTModel;
 import com.booksapp.booksapp.security.JWTProvider;
 import com.booksapp.booksapp.security.JWTRedisService;
 import com.booksapp.booksapp.security.LoginRequest;
-import com.booksapp.booksapp.service.UserServiceImpl;
+import com.booksapp.booksapp.service.user.UserServiceImpl;
 import com.booksapp.booksapp.service.email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.book;
 
 import com.booksapp.booksapp.model.persistence.BookCategoryEntity;
 import com.booksapp.booksapp.model.persistence.BookEntity;
