@@ -15,4 +15,10 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             "inner join books_app.categories c on c.id = b.category_id " +
             "where b.id = :bookId and c.seller_id = :sellerId and c.id = :categoryId", nativeQuery = true)
     Optional<BookEntity> findBookById(long sellerId, long categoryId, long bookId);
+
+    @Query(value = "SELECT * FROM books_app.books b " +
+            "inner join books_app.categories c on b.category_id = c.id " +
+            "inner join books_app.sellers s on c.seller_id = s.id " +
+            "where s.id = :sellerId and c.id = :categoryId and b.id = :bookId", nativeQuery = true)
+    Optional<BookEntity> findBookBySellerIdCategoryIdBookId(long sellerId, long categoryId, long bookId);
 }

@@ -47,7 +47,7 @@ public class CustomerController {
         customerEntity.setUserEntity(userEntity);
         customerService.createCustomer(customerEntity);
 
-        emailSender.sendEmail(customerDTO.getEmail(), "Your account has benn created.");
+        emailSender.sendEmail(customerDTO.getEmail(), "Your account has been created.");
 
         return new ResponseEntity<>(customerEntity, HttpStatus.CREATED);
 

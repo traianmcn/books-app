@@ -26,6 +26,13 @@ public class BookEntity {
     @JsonIgnore
     private BookCategoryEntity bookCategoryEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content")
+    private OrderEntity orderEntity;
+
+    public BookEntity() {
+    }
+
     public BookEntity(String name, String author, double price, BookCategoryEntity bookCategoryEntity) {
         this.name = name;
         this.author = author;
@@ -33,8 +40,6 @@ public class BookEntity {
         this.bookCategoryEntity = bookCategoryEntity;
     }
 
-    public BookEntity() {
-    }
 
     public long getId() {
         return id;
@@ -82,5 +87,22 @@ public class BookEntity {
 
     public void setBookCategoryEntity(BookCategoryEntity bookCategoryEntity) {
         this.bookCategoryEntity = bookCategoryEntity;
+    }
+
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "BookEntity{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

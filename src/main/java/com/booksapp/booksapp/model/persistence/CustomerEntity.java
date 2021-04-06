@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Table(name = "customers", schema = "books_app")
 @Entity
@@ -12,8 +14,6 @@ public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(updatable = false, nullable = false)
-//    @Column(name = "customer_id")
     private long id;
 
     @CreationTimestamp
@@ -31,6 +31,12 @@ public class CustomerEntity {
     @JsonIgnore
     private UserEntity userEntity;
 
+    @OneToMany(mappedBy = "customerEntity",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    Set<OrderEntity> orders;
+
     public CustomerEntity() {
     }
 
@@ -39,6 +45,7 @@ public class CustomerEntity {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.userEntity = userEntity;
+        this.orders = new HashSet<OrderEntity>();
     }
 
 
