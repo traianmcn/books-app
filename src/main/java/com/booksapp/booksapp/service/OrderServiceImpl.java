@@ -3,6 +3,8 @@ package com.booksapp.booksapp.service;
 import com.booksapp.booksapp.dao.BookRepository;
 import com.booksapp.booksapp.dao.OrderRepository;
 import com.booksapp.booksapp.exceptions.BookNotFoundException;
+import com.booksapp.booksapp.exceptions.CancelOrderException;
+import com.booksapp.booksapp.exceptions.OrderNotFoundException;
 import com.booksapp.booksapp.exceptions.customerException.CustomerNotFoundException;
 import com.booksapp.booksapp.model.dto.ContentDTO;
 import com.booksapp.booksapp.model.dto.OrderDTO;
@@ -15,6 +17,7 @@ import com.booksapp.booksapp.service.seller.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,5 +74,27 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderEntity> getOrdersByCustomerId(long customerId) {
         this.customerService.getCustomerById(customerId);
         return this.orderRepository.findOrdersByCustomerId(customerId).get();
+    }
+
+    @Override
+    public OrderEntity getOrderById(long customerId, long orderId) {
+        Optional<OrderEntity> order = this.orderRepository.getOrderById(customerId, orderId);
+        if (order.isEmpty()) {
+            throw new OrderNotFoundException("The order with id " + orderId + " cannot be found.");
+        }
+        return order.get();
+    }
+
+    @Override
+    public void cancelOrder(long customerId, long orderId) {
+        OrderEntity order = getOrderById(customerId, orderId);
+        long orderTime = order.getCreated_at().getTime();
+        long now = System.currentTimeMillis();
+
+        long diffMinutes = (now - orderTime)/ (60*1000);
+        if (diffMinutes > 5) {
+            throw new CancelOrderException("The order cannot be canceled because it has been created more than five minutes ago.");
+        }
+        this.orderRepository.delete(order);
     }
 }

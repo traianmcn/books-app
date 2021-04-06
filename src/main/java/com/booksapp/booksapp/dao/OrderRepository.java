@@ -15,4 +15,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Query(value = "SELECT * FROM books_app.orders o WHERE o.customer_id = :customerId", nativeQuery = true)
     Optional<List<OrderEntity>> findOrdersByCustomerId(long customerId);
 
+    @Query(value = "SELECT * FROM books_app.orders o WHERE o.customer_id = :customerId and o.id = :orderId", nativeQuery = true)
+    Optional<OrderEntity> getOrderById(long customerId, long orderId);
+
 }

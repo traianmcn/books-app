@@ -60,4 +60,22 @@ public class OrderController {
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderEntity> getOrderById(@RequestHeader("Authorization") String jwt, @PathVariable long orderId) {
+        String email = this.jwtProvider.getSubjectFromJWT(jwt);
+        CustomerEntity customerEntity = this.userService.getUserByEmail(email).getCustomerEntity();
+        OrderEntity order = orderService.getOrderById(customerEntity.getId(), orderId);
+
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cancelOrder/{orderId}")
+    public ResponseEntity cancelOrder(@RequestHeader("Authorization") String jwt, @PathVariable long orderId) {
+        String email = this.jwtProvider.getSubjectFromJWT(jwt);
+        CustomerEntity customerEntity = this.userService.getUserByEmail(email).getCustomerEntity();
+        orderService.cancelOrder(customerEntity.getId(), orderId);
+
+        return ResponseEntity.ok().build();
+    }
 }

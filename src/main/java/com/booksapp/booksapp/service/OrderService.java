@@ -13,5 +13,7 @@ public interface OrderService {
 
     OrderEntity createOrder(OrderDTO orderDTO, CustomerEntity customerEntity);
     List<OrderEntity> getOrdersByCustomerId(long customerId);
+    OrderEntity getOrderById(long customerId, long orderId);
+    void cancelOrder(long customerId, long orderId);
 
 }
