@@ -1,5 +1,6 @@
-package com.booksapp.booksapp.exceptions;
+package com.booksapp.booksapp.exceptions.orderExceptions;
 
+import com.booksapp.booksapp.exceptions.ApiError;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

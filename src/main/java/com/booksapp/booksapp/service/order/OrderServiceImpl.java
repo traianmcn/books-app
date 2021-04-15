@@ -1,10 +1,10 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.order;
 
 import com.booksapp.booksapp.dao.BookRepository;
 import com.booksapp.booksapp.dao.OrderRepository;
-import com.booksapp.booksapp.exceptions.BookNotFoundException;
-import com.booksapp.booksapp.exceptions.CancelOrderException;
-import com.booksapp.booksapp.exceptions.OrderNotFoundException;
+import com.booksapp.booksapp.exceptions.bookExceptions.BookNotFoundException;
+import com.booksapp.booksapp.exceptions.orderExceptions.CancelOrderException;
+import com.booksapp.booksapp.exceptions.orderExceptions.OrderNotFoundException;
 import com.booksapp.booksapp.exceptions.customerException.CustomerNotFoundException;
 import com.booksapp.booksapp.model.dto.ContentDTO;
 import com.booksapp.booksapp.model.dto.OrderDTO;
@@ -17,7 +17,6 @@ import com.booksapp.booksapp.service.seller.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.booksapp.booksapp.service;
+package com.booksapp.booksapp.service.order;
 
 import com.booksapp.booksapp.model.dto.OrderDTO;
 import com.booksapp.booksapp.model.persistence.CustomerEntity;

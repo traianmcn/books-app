@@ -5,14 +5,13 @@ import com.booksapp.booksapp.model.dto.OrderDTO;
 import com.booksapp.booksapp.model.persistence.CustomerEntity;
 import com.booksapp.booksapp.model.persistence.OrderEntity;
 import com.booksapp.booksapp.security.JWTProvider;
-import com.booksapp.booksapp.service.OrderServiceImpl;
+import com.booksapp.booksapp.service.order.OrderServiceImpl;
 import com.booksapp.booksapp.service.email.EmailSender;
 import com.booksapp.booksapp.service.seller.SellerServiceImpl;
 import com.booksapp.booksapp.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
