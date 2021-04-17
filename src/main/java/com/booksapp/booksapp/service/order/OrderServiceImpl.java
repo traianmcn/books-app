@@ -63,7 +63,6 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         orderEntity.setContent(books);
-//        System.out.println(books.toString());
         orderEntity.setValue(value);
 
         return this.orderRepository.save(orderEntity);
@@ -92,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
 
         long diffMinutes = (now - orderTime)/ (60*1000);
         if (diffMinutes > 5) {
-            throw new CancelOrderException("The order cannot be canceled because it has been created more than five minutes ago.");
+            throw new CancelOrderException("The order cannot be canceled because it has been created more than 5 minutes ago.");
         }
         this.orderRepository.delete(order);
     }
